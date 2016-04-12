@@ -70,6 +70,7 @@ var drawRoundedRect = function(context, x, y, width, height, borderRadius) {
 var AvatarEditor = React.createClass({
     propTypes: {
         scale: React.PropTypes.number,
+        angle: React.PropTypes.number,
         image: React.PropTypes.string,
         border: React.PropTypes.number,
         borderRadius: React.PropTypes.number,
@@ -88,6 +89,7 @@ var AvatarEditor = React.createClass({
     getDefaultProps() {
         return {
             scale: 1,
+            angle: 0,
             border: 25,
             borderRadius: 0,
             width: 200,
@@ -109,7 +111,7 @@ var AvatarEditor = React.createClass({
             mx: null,
             image: {
                 x: 0,
-                y: 0
+                y: 0,
             }
         };
     },
@@ -248,6 +250,9 @@ var AvatarEditor = React.createClass({
         ) {
             this.squeeze(newProps);
         }
+        if (this.props.angle != newProps.angle) {
+            this.rotate((newProps.angle - this.props.angle));
+        }
     },
 
     paintImage(context, image, border) {
@@ -295,7 +300,7 @@ var AvatarEditor = React.createClass({
         // clamp border radius between zero (perfect rectangle) and half the size without borders (perfect circle or "pill")
         borderRadius = Math.max(borderRadius, 0);
         borderRadius = Math.min(borderRadius, width/2 - borderSize, height/2 - borderSize);
-        
+
         context.beginPath();
         drawRoundedRect(context, borderSize, borderSize, width - borderSize*2, height - borderSize*2, borderRadius); // inner rect, possibly rounded
         context.rect(width, 0, -width, height); // outer rect, drawn "counterclockwise"
@@ -347,6 +352,46 @@ var AvatarEditor = React.createClass({
         }
 
         this.setState(newState);
+    },
+
+    rotate(angle) {
+        // Normalize angle (only 90/180/270 is allowed)
+        angle %= 360;
+        angle = (angle < 0) ? angle + 360 : angle;
+        angle -= angle % 90;
+        
+        if (!angle) {
+            return;
+        }
+        
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        
+        var imageState = this.state.image;
+        
+        var iWidth = imageState.resource.width;
+        var iHeight = imageState.resource.height
+        
+        canvas.width = iWidth;
+        canvas.height = iHeight;
+        
+        // if 90 or 270 - switch width and height
+        if ((angle % 180) !== 0) {
+            canvas.width = iHeight;
+            canvas.height = iWidth;
+        }
+        
+        context.save();
+        
+        context.translate((canvas.width / 2), (canvas.height / 2));
+        context.rotate((angle * Math.PI / 180));
+        context.translate(-(iWidth / 2), -(iHeight / 2));
+        
+        context.drawImage(imageState.resource, 0, 0);
+        
+        context.restore();
+        
+        this.handleImageReady(canvas);
     },
 
     squeeze(props) {
