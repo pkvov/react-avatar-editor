@@ -33,10 +33,10 @@ var ImageWithRect = React.createClass({
 
     render: function() {
         return <canvas
-        ref="root"
-        style={this.props.style}
-        width={this.props.width}
-        height={this.props.height} />;
+                   ref="root"
+                   style={this.props.style}
+                   width={this.props.width}
+                   height={this.props.height} />;
     }
 });
 
@@ -84,15 +84,15 @@ var App = React.createClass({
     render: function() {
         return <div>
             <Editor
-        ref="avatar"
-        scale={this.state.scale}
-        angle={this.state.angle}
-        borderRadius={this.state.borderRadius}
-        onSave={this.handleSave}
-        onLoadFailed={this.logCallback.bind(this, 'onLoadFailed')}
-        onUpload={this.logCallback.bind(this, 'onUpload')}
-        onImageLoad={this.logCallback.bind(this, 'onImageLoad')}
-        image="example/avatar.jpg"/>
+                ref="avatar"
+                scale={this.state.scale}
+                angle={this.state.angle}
+                borderRadius={this.state.borderRadius}
+                onSave={this.handleSave}
+                onLoadFailed={this.logCallback.bind(this, 'onLoadFailed')}
+                onUpload={this.logCallback.bind(this, 'onUpload')}
+                onImageLoad={this.logCallback.bind(this, 'onImageLoad')}
+                image="example/image001.png"/>
             <br />
             Zoom: <input name="scale" type="range" ref="scale" onChange={this.handleScale} min="1" max="2" step="0.01" defaultValue="1" />
             <br />
@@ -104,15 +104,15 @@ var App = React.createClass({
             <br />
             <img src={this.state.preview} style={{borderRadius: this.state.borderRadius + 5 /* because of the 5px padding */}} />
             
-        {this.state.croppingRect? // display only if there is a cropping rect
-         <ImageWithRect
-         width={200 * 478 / 270}
-         height={200}
-         image="example/avatar.jpg"
-         rect={this.state.croppingRect}
-         style={{margin: '10px 24px 32px', padding: 5, border: '1px solid #CCC'}} />
-         :
-         null}
+            {this.state.croppingRect? // display only if there is a cropping rect
+             <ImageWithRect
+                 width={200 * 478 / 270}
+                 height={200}
+                 image="example/image001.png"
+                 rect={this.state.croppingRect}
+                 style={{margin: '10px 24px 32px', padding: 5, border: '1px solid #CCC'}} />
+             :
+             null}
         </div>
     }
 

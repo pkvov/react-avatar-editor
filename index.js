@@ -168,7 +168,7 @@ var AvatarEditor = React.createClass({
         if (!this.isDataURL(imageURL)) imageObj.crossOrigin = 'anonymous';
         imageObj.src = imageURL;
     },
-
+    
     componentDidMount() {
         var context = ReactDOM.findDOMNode(this.refs.canvas).getContext('2d');
         if (this.props.image) {
@@ -371,22 +371,6 @@ var AvatarEditor = React.createClass({
         
         var iWidth = imageState.resource.width;
         var iHeight = imageState.resource.height;
-
-        //to avoid ios image too large problem
-        var dimensions = this.getDimensions();
-        //console.log("dimensions", dimensions, "iWidth", iWidth, "iHeight", iHeight);
-        var iWidthScale = iWidth / (dimensions.canvas.width * 2);
-        var iHeightScale = iHeight / (dimensions.canvas.height * 2);
-        if (iWidthScale > 1 && iHeight > 1){
-            if (iWidthScale > iHeight) {
-                iWidth = Math.floor(iWidth / iWidthScale);
-                iHeight = Math.floor(iHeight / iWidthScale);
-            }
-            else {
-                iWidth = Math.floor(iWidth / iHeightScale);
-                iHeight = Math.floor(iHeight / iHeightScale);
-            }
-        }
         
         canvas.width = iWidth;
         canvas.height = iHeight;
@@ -408,6 +392,7 @@ var AvatarEditor = React.createClass({
         context.restore();
         
         this.handleImageReady(canvas);
+
     },
 
     squeeze(props) {
