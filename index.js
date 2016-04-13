@@ -375,8 +375,8 @@ var AvatarEditor = React.createClass({
         //to avoid ios image too large problem
         var dimensions = this.getDimensions();
         //console.log("dimensions", dimensions, "iWidth", iWidth, "iHeight", iHeight);
-        var iWidthScale = iWidth / dimensions.canvas.width;
-        var iHeightScale = iHeight / dimensions.canvas.height;
+        var iWidthScale = iWidth / (dimensions.canvas.width * 2);
+        var iHeightScale = iHeight / (dimensions.canvas.height * 2);
         if (iWidthScale > 1 && iHeight > 1){
             if (iWidthScale > iHeight) {
                 iWidth = Math.floor(iWidth / iWidthScale);
@@ -387,10 +387,7 @@ var AvatarEditor = React.createClass({
                 iHeight = Math.floor(iHeight / iHeightScale);
             }
         }
-        // if (iHeight > dimensions.canvas.height*2) {
-        //     iWidth = iWidth * iHeight/ (dimensions.canvas.height*2);
-        //     iHeight = dimensions.canvas.height*2;
-        // }
+        
         canvas.width = iWidth;
         canvas.height = iHeight;
         
